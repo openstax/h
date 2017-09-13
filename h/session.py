@@ -2,6 +2,7 @@
 
 from pyramid.session import SignedCookieSessionFactory
 
+from h.formatters import UserInfoFormatter
 from h.security import derive_key
 
 
@@ -38,6 +39,10 @@ def profile(request, authority=None):
     profile['groups'] = _current_groups(request, authority)
     profile['features'] = request.feature.all()
     profile['preferences'] = _user_preferences(user)
+
+    info_formatter = UserInfoFormatter()
+    profile.update(info_formatter.format(user))
+
     return profile
 
 
