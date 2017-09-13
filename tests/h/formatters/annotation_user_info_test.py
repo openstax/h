@@ -12,6 +12,7 @@ from h.formatters.annotation_user_info import AnnotationUserInfoFormatter
 FakeAnnotationResource = namedtuple('FakeAnnotationResource', ['annotation'])
 
 
+@pytest.mark.usefixtures('user_formatter')
 class TestAnnotationUserInfoFormatter(object):
     def test_preload_fetches_users_by_id(self, formatter, factories, user_svc):
         annotation_1 = factories.Annotation()
@@ -34,29 +35,27 @@ class TestAnnotationUserInfoFormatter(object):
 
         user_svc.fetch.assert_called_once_with(annotation.userid)
 
-    def test_format_returns_user_info_object(self, formatter, user_svc):
-        user_svc.fetch.return_value = mock.Mock(display_name='Jane Doe')
-        resource = FakeAnnotationResource(mock.Mock())
+    def test_format_uses_user_formatter(self, formatter, user_svc, user_formatter):
+        user = mock.Mock(display_name='Jane Doe')
+        user_svc.fetch.return_value = user
 
-        result = formatter.format(resource)
-        assert result == {'user_info': {'display_name': 'Jane Doe'}}
+        formatter.format(FakeAnnotationResource(mock.Mock()))
 
-    def test_format_allows_null_display_name(self, formatter, user_svc):
-        user_svc.fetch.return_value = mock.Mock(display_name=None)
-        resource = FakeAnnotationResource(mock.Mock())
+        user_formatter.format.assert_called_once_with(user)
 
-        result = formatter.format(resource)
-        assert result == {'user_info': {'display_name': None}}
+    def test_format_returns_formatted_user_info(self, formatter, user_formatter):
+        result = formatter.format(FakeAnnotationResource(mock.Mock()))
 
-    def test_format_returns_empty_dict_when_user_missing(self, formatter, user_svc):
-        user_svc.fetch.return_value = None
-        resource = FakeAnnotationResource(mock.Mock())
-
-        assert formatter.format(resource) == {}
+        assert result == user_formatter.format.return_value
 
     @pytest.fixture
     def formatter(self, db_session, user_svc):
         return AnnotationUserInfoFormatter(db_session, user_svc)
+
+    @pytest.fixture
+    def user_formatter(self, patch):
+        cls = patch('h.formatters.annotation_user_info.UserInfoFormatter')
+        return cls.return_value
 
     @pytest.fixture
     def user_svc(self):

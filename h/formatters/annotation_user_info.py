@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from zope.interface import implementer
 
 from h import models
+from h.formatters.user_info import UserInfoFormatter
 from h.formatters.interfaces import IAnnotationFormatter
 
 
@@ -13,6 +14,7 @@ class AnnotationUserInfoFormatter(object):
     def __init__(self, session, user_svc):
         self.session = session
         self.user_svc = user_svc
+        self.user_formatter = UserInfoFormatter()
 
     def preload(self, ids):
         if not ids:
@@ -23,12 +25,4 @@ class AnnotationUserInfoFormatter(object):
 
     def format(self, annotation_resource):
         user = self.user_svc.fetch(annotation_resource.annotation.userid)
-
-        if user is None:
-            return {}
-
-        return {
-            'user_info': {
-                'display_name': user.display_name,
-            }
-        }
+        return self.user_formatter.format(user)

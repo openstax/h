@@ -44,3 +44,32 @@ class IAnnotationFormatter(Interface):
         :returns: A formatted dictionary.
         :rtype: dict
         """
+
+
+class IUserFormatter(Interface):
+    """
+    Interface for user formatters.
+
+    User formatters are ways to compose a user JSON representation out of
+    different formatters.
+
+    The main method is ``format(user)`` which is expected to return a
+    dictionary representation based on the passed-in user. If the formatter
+    depends on other data it should be able to load it on-demand for the
+    give user.
+
+    Currently there is no need to format a list of potentially hundreds of
+    users in one request, if we have a need for this we should provide a
+    way for formatters to optimize database access.
+    """
+
+    def format(user):  # noqa: N805
+        """
+        Presents data for a JSON user representation.
+
+        :param user: The user that needs presenting.
+        :type user: h.models.User
+
+        :returns: A formatted dictionary.
+        :rtype: dict
+        """
