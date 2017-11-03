@@ -4,6 +4,11 @@ from h.util import cors
 
 
 cors_policy = cors.policy(
+    allow_headers=(
+        'Authorization',
+        'Content-Type',
+        'X-Client-Id',
+    ),
     allow_methods=('HEAD', 'GET', 'PATCH', 'POST', 'PUT', 'DELETE'))
 
 
