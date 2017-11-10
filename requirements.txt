@@ -82,3 +82,4 @@ wsaccel==0.6.2
 zope.deprecation==4.1.2   # via deform, pyramid, pyramid-jinja2
 zope.interface==4.3.2
 zope.sqlalchemy==0.7.7
+boxsdk[jwt]==1.5.5

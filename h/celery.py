@@ -16,6 +16,7 @@ import os
 
 from celery import Celery
 from celery import signals
+from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from kombu import Exchange, Queue
 from raven.contrib.celery import register_signal, register_logger_signal
@@ -54,6 +55,10 @@ celery.conf.update(
             'task': 'h.tasks.cleanup.purge_removed_features',
             'schedule': timedelta(hours=6)
         },
+        'export-annotations': {
+            'task': 'h.tasks.exporter.export_annotations',
+            'schedule': crontab(minute=0, hour=0)
+        }
     },
     CELERY_ACCEPT_CONTENT=['json'],
     # Enable at-least-once delivery mode. This probably isn't actually what we
@@ -67,6 +72,7 @@ celery.conf.update(
         'h.tasks.cleanup',
         'h.tasks.indexer',
         'h.tasks.mailer',
+        'h.tasks.exporter'
     ),
     CELERY_ROUTES={
         'h.tasks.indexer.add_annotation': 'indexer',
