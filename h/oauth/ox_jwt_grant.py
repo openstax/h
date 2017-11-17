@@ -38,6 +38,7 @@ For more information, see the `oauthlib documentation`_ on grant types.
 from __future__ import unicode_literals
 
 import json
+from datetime import datetime
 
 from oauthlib.oauth2.rfc6749 import errors
 from oauthlib.oauth2.rfc6749.grant_types.base import GrantTypeBase
@@ -124,7 +125,8 @@ class OpenStaxJWTAuthorizationGrant(GrantTypeBase):
         if user is None:
             user = User(authority=authclient.authority,
                         username=user_data['username'],
-                        email=verified_token.subject)
+                        email=verified_token.subject,
+                        password_updated=datetime.utcnow())
             self.user_svc.session.add(user)
             self.user_svc.session.flush()
 

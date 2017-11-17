@@ -11,8 +11,8 @@ from h._compat import string_types
 from h.db import Base
 from h.util.user import split_user
 
-USERNAME_MIN_LENGTH = 3
-USERNAME_MAX_LENGTH = 30
+USERNAME_MIN_LENGTH = 1
+USERNAME_MAX_LENGTH = 300
 USERNAME_PATTERN = '(?i)^[A-Z0-9._]+$'
 EMAIL_MAX_LENGTH = 100
 
