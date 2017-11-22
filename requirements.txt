@@ -47,7 +47,7 @@ passlib==1.7.1
 pastedeploy==1.5.2        # via pyramid
 peppercorn==0.5           # via deform
 psycogreen==1.0
-psycopg2==2.6.2
+psycopg2==2.7.3.2
 pycparser==2.14           # via cffi
 pyjwt==1.4.1
 pyparsing==2.1.10
