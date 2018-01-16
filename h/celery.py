@@ -54,10 +54,6 @@ celery.conf.update(
         'purge-removed-features': {
             'task': 'h.tasks.cleanup.purge_removed_features',
             'schedule': timedelta(hours=6)
-        },
-        'export-annotations': {
-            'task': 'h.tasks.exporter.export_annotations',
-            'schedule': crontab(minute=0, hour=0)
         }
     },
     CELERY_ACCEPT_CONTENT=['json'],
@@ -72,7 +68,6 @@ celery.conf.update(
         'h.tasks.cleanup',
         'h.tasks.indexer',
         'h.tasks.mailer',
-        'h.tasks.exporter'
     ),
     CELERY_ROUTES={
         'h.tasks.indexer.add_annotation': 'indexer',
