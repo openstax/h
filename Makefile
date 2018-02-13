@@ -32,7 +32,7 @@ dev: build/manifest.json .pydeps
 ## Build hypothesis/hypothesis docker image
 .PHONY: docker
 docker:
-	git archive HEAD | docker build -t hypothesis/hypothesis:$(DOCKER_TAG) -
+	git archive HEAD | docker build -t openstax/hypothesis-server:$(DOCKER_TAG) -
 
 ## Run test suite
 .PHONY: test

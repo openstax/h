@@ -83,15 +83,6 @@ SETTINGS = [
     # secret.
     EnvSetting('h.client_oauth_id', 'CLIENT_OAUTH_ID'),
 
-    # Box settings
-    EnvSetting('h.box_client_id', 'BOX_CLIENT_ID'),
-    EnvSetting('h.box_client_secret', 'BOX_CLIENT_SECRET'),
-    EnvSetting('h.box_enterprise_id', 'BOX_ENTERPRISE_ID'),
-    EnvSetting('h.box_rsa_private_key_pass', 'BOX_RSA_PRIVATE_KEY_PASS', type=bytes),
-    EnvSetting('h.box_rsa_private_key_path', 'BOX_RSA_PRIVATE_KEY_PATH'),
-    EnvSetting('h.box_folder_id', 'BOX_FOLDER_ID'),
-    EnvSetting('h.box_jwt_key_id', 'BOX_JWT_KEY_ID'),
-
     # Environment name, provided by the deployment environment. Please do
     # *not* toggle functionality based on this value. It is intended as a
     # label only.
