@@ -1,0 +1,20 @@
+pipeline {
+  agent { label 'docker' }
+  options {
+    ansiColor colorMapName: 'XTerm'
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh "docker build -t openstax/hypothesis-server ."
+      }
+    }
+    stage('Publish') {
+      steps {
+        withDockerRegistry([credentialsId: 'docker-registry']) {
+          sh "docker push openstax/hypothesis-server"
+        }
+      }
+    }
+  }
+}
