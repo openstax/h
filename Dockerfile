@@ -6,13 +6,18 @@ RUN apk-install \
     ca-certificates \
     collectd \
     collectd-nginx \
+    curl \
     libffi \
     libpq \
+    make \
     nginx \
     python \
     py-pip \
     nodejs \
     git
+
+RUN curl https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -o /usr/local/bin/wait-for \
+  && chmod a+x /usr/local/bin/wait-for
 
 # Create the hypothesis user, group, home directory and package directory.
 RUN addgroup -S hypothesis && adduser -S -G hypothesis -h /var/lib/hypothesis hypothesis
