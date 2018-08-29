@@ -74,7 +74,8 @@ node_modules/.uptodate: package.json
 .PHONY: help
 help:
 	@echo "The following targets are available:"
+	@echo " env        Generates content that can be added to an .env file with api credentials"
 	@echo " clean      Clean up runtime artifacts (needed after a version update)"
-	@echo " dev        Run the development H server locally"
+	@echo " dev        Run the development H server locally. Can specify path to environment file with the add_credentials_to option"
 	@echo " docker     Build hypothesis/hypothesis docker image"
 	@echo " test       Run the test suite (default)"
