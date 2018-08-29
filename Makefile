@@ -23,11 +23,27 @@ clean:
 	rm -f node_modules/.uptodate .pydeps
 	rm -rf build
 
+.PHONY: env
+env:
+	@bin/hypothesis authclient add --name openstax --authority openstax.org --type confidential | tail -n 2 | sed -e 's/Client ID: /HYPOTHESIS_CLIENT_ID=/' | sed -e 's/Client Secret: /HYPOTHESIS_CLIENT_SECRET=/'
+
 ## Run the development H server locally
 .PHONY: dev
-dev: build/manifest.json .pydeps
-	@bin/hypothesis --dev init
-	@bin/hypothesis devserver
+dev:
+	@echo "initializing hypothesis..."
+	@bin/hypothesis init
+
+ifneq ($(add_credentials_to),)
+ifneq ($(wildcard $(add_credentials_to)),)
+ifeq ($(shell grep -F HYPOTHESIS_CLIENT_ID $(add_credentials_to)),)
+	echo "generating credentials..."
+	@make -s env >> "$(add_credentials_to)"
+endif
+endif
+endif
+
+	@echo "starting server..."
+	@init-env supervisord -c conf/supervisord.conf
 
 ## Build hypothesis/hypothesis docker image
 .PHONY: docker
@@ -58,7 +74,8 @@ node_modules/.uptodate: package.json
 .PHONY: help
 help:
 	@echo "The following targets are available:"
+	@echo " env        Generates content that can be added to an .env file with api credentials"
 	@echo " clean      Clean up runtime artifacts (needed after a version update)"
-	@echo " dev        Run the development H server locally"
+	@echo " dev        Run the development H server locally. Can specify path to environment file with the add_credentials_to option"
 	@echo " docker     Build hypothesis/hypothesis docker image"
 	@echo " test       Run the test suite (default)"

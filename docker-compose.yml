@@ -1,26 +1,9 @@
-version: '3'
+version: '3.5'
 services:
-  h:
-    build: .
-    ports:
-      - "5000:5000"
-    links:
-      - postgres
-      - elasticsearch
-      - rabbit
-    environment:
-      - APP_URL=http://localhost:5000
-      - BROKER_URL=amqp://guest:guest@rabbit:5672//
-      - SECRET_KEY=notverysecretafterall
-      - DATABASE_URL=postgresql://postgres@postgres/postgres
-      - ELASTICSEARCH_HOST=http://elasticsearch:9200
-      - ELASTICSEARCH_INDEX=hypothesis
-      - AUTHORITY=localhost
-      - CLIENT_ID=nosuchid
-      - CLIENT_SECRET=nosuchsecret
-  postgres:
-    image: postgres:9.4-alpine
-  elasticsearch:
-    image: nickstenning/elasticsearch-icu
-  rabbit:
-    image: rabbitmq:3.6-management-alpine
+  hypothesis:
+    networks:
+      - openstax
+    image: "openstax/hypothesis-server"
+networks:
+  openstax:
+    name: openstax
