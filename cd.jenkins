@@ -11,6 +11,9 @@ pipeline {
         withDockerRegistry([credentialsId: 'docker-registry', url: '']) {
           sh "docker push openstax/hypothesis-server:dev"
         }
+        withDockerServer([uri: 'tcp://:172.31.8.67:2376']) {
+          sh "docker stack deploy --prune -c docker-compose.yml -c docker-compose.dev.yml hypothesis"
+        }
       }
     }
     stage('Publish Release') {

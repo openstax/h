@@ -1,9 +1,4 @@
 version: '3.5'
 services:
-  hypothesis:
-    networks:
-      - openstax
+  server:
     image: "openstax/hypothesis-server"
-networks:
-  openstax:
-    name: openstax
