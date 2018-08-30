@@ -54,7 +54,6 @@ class VerifiedJWTGrantToken(JWTGrantToken):
 
     """
 
-    MAX_LIFETIME = datetime.timedelta(minutes=10)
     LEEWAY = datetime.timedelta(seconds=10)
 
     def __init__(self, token, key, audience):
@@ -62,8 +61,6 @@ class VerifiedJWTGrantToken(JWTGrantToken):
         self._verify(key, audience)
 
     def _verify(self, key, audience):
-        if self.expiry - self.not_before > self.MAX_LIFETIME:
-            raise InvalidGrantError('Grant token lifetime is too long.')
         try:
             jwt.decode(self._token,
                        algorithms=['HS256'],
