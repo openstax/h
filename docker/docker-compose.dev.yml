@@ -14,6 +14,8 @@ services:
       - ELASTICSEARCH_HOST=http://elasticsearch:9200
       - ELASTICSEARCH_INDEX=hypothesis
       - AUTHORITY=localhost
+      - CLIENT_ID=nosuchid
+      - CLIENT_SECRET=nosuchsecret
   rabbit:
     image: rabbitmq:3.6-management-alpine
     networks:
