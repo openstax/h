@@ -2,10 +2,14 @@ version: '3.5'
 services:
   server:
     build: .
-    command: wait-for postgres:5432 -t 60 -- wait-for elasticsearch:9200 -t 60 -- make dev
+    command: wait-for postgres:5432 -t 60 -- wait-for elasticsearch:9200 -t 60 -- make dev add_credentials_to=/shared-credentials/env
     ports:
       - "5000:5000"
+    volumes:
+      - .:/var/lib/hypothesis
+      - /tmp/hypothesis-credentials:/shared-credentials
     networks:
+      - openstax
       - hypothesis
     environment:
       - APP_URL=http://localhost:5000
@@ -15,8 +19,12 @@ services:
       - ELASTICSEARCH_HOST=http://elasticsearch:9200
       - ELASTICSEARCH_INDEX=hypothesis
       - AUTHORITY=localhost
+      - CLIENT_ID=nosuchid
+      - CLIENT_SECRET=nosuchsecret
   postgres:
     image: postgres:9.4-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     networks:
       - hypothesis
   elasticsearch:
@@ -27,6 +35,8 @@ services:
     image: rabbitmq:3.6-management-alpine
     networks:
       - hypothesis
+volumes:
+  pgdata:
 networks:
   hypothesis:
   openstax:

@@ -34,12 +34,8 @@ dev:
 	@bin/hypothesis init
 
 ifneq ($(add_credentials_to),)
-ifneq ($(wildcard $(add_credentials_to)),)
-ifeq ($(shell grep -F HYPOTHESIS_CLIENT_ID $(add_credentials_to)),)
-	echo "generating credentials..."
-	@make -s env >> "$(add_credentials_to)"
-endif
-endif
+	@echo "generating credentials..."
+	@make -s env > "$(add_credentials_to)"
 endif
 
 	@echo "starting server..."

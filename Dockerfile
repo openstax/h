@@ -3,6 +3,7 @@ MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
 RUN apk-install \
+    bash \
     ca-certificates \
     collectd \
     collectd-nginx \
@@ -20,8 +21,8 @@ RUN curl https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -o /
   && chmod a+x /usr/local/bin/wait-for
 
 # Create the hypothesis user, group, home directory and package directory.
-RUN addgroup -S hypothesis && adduser -S -G hypothesis -h /var/lib/hypothesis hypothesis
-WORKDIR /var/lib/hypothesis
+RUN addgroup -S hypothesis && adduser -S -G hypothesis -h /code hypothesis
+WORKDIR /code
 
 # Ensure nginx state and log directories writeable by unprivileged user.
 RUN chown -R hypothesis:hypothesis /var/log/nginx /var/lib/nginx
@@ -62,10 +63,13 @@ RUN npm install --production \
 EXPOSE 5000
 
 # Set the application environment
-ENV PATH /var/lib/hypothesis/bin:$PATH
+ENV PATH /code/bin:$PATH
 ENV PYTHONIOENCODING utf_8
-ENV PYTHONPATH /var/lib/hypothesis:$PYTHONPATH
+ENV PYTHONPATH /code:$PYTHONPATH
 
 # Start the web server by default
 USER hypothesis
+
+ENTRYPOINT ["/code/docker/entrypoint"]
+
 CMD ["init-env", "supervisord", "-c" , "conf/supervisord.conf"]

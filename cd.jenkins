@@ -12,25 +12,8 @@ pipeline {
           sh "docker push openstax/hypothesis-server:dev"
         }
         withDockerServer([uri: env.SWARM_URI, credentialsId: '']) {
-          sh "docker stack deploy --prune -c docker-compose.yml -c docker-compose.dev.yml hypothesis"
+          sh "docker stack deploy --prune -c docker-compose.yml -c docker/docker-compose.dev.yml hypothesis"
         }
       }
     }
-    stage('Publish Release') {
-      when {
-        expression {
-          release = sh(returnStdout: true, script: 'git tag -l --points-at HEAD | head -n 1').trim()
-          return release
-        }
-      }
-      steps {
-        withDockerRegistry([credentialsId: 'docker-registry', url: '']) {
-          sh "docker tag openstax/hypothesis-server:dev openstax/hypothesis-server:${release}"
-          sh "docker tag openstax/hypothesis-server:dev openstax/hypothesis-server:latest"
-          sh "docker push openstax/hypothesis-server:${release}"
-          sh "docker push openstax/hypothesis-server:latest"
-        }
-      }
-    }
-  }
 }
