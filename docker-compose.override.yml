@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/var/lib/hypothesis
+      - .:/code
       - /tmp/hypothesis-credentials:/shared-credentials
     networks:
       - openstax
