@@ -1,18 +1,17 @@
 pipeline {
   agent { label 'docker' }
   environment {
-    release = sh(returnStdout: true, script: 'git tag -l --points-at HEAD | head -n 1').trim()
+    release = sh(returnStdout: true, script: 'git tag -l --points-at HEAD | head -1').trim()
   }
   stages {
     stage('Build') {
       steps {
-        sh "docker build -t openstax/hypothesis-server:latest ."
+        sh "docker build -t openstax/hypothesis-server:latest -t openstax/hypothesis-server:${env.release} ."
       }
     }
     stage('Publish Release') {
       steps {
         withDockerRegistry([credentialsId: 'docker-registry', url: '']) {
-          sh "docker tag openstax/hypothesis-server:latest openstax/hypothesis-server:${env.release}"
           sh "docker push openstax/hypothesis-server:${env.release}"
           sh "docker push openstax/hypothesis-server:latest"
         }
